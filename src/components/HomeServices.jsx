@@ -6,7 +6,7 @@ const TOP_6_SERVICES = [
   {
     title: "Household Shifting",
     slug: "home-shifting",
-    image: "/images/home-service.jpg",
+    image: "/images/home-service-icon.svg",
     desc: "Safe household and residential shifting"
   },
   {

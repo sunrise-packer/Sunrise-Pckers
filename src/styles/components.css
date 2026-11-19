@@ -490,6 +490,53 @@
   line-height: 1.25;
 }
 
+/* Why Choose Us Reference Layout (Exact from Reference Image) */
+.why-choose-reference-card {
+  background-color: #EEF4FA !important;
+  border: 1px solid #D8E5F0 !important;
+}
+
+.why-feature-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.25s ease;
+}
+
+.why-feature-item:hover {
+  transform: translateY(-3px);
+}
+
+.why-solid-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 58px;
+  height: 58px;
+}
+
+.why-solid-icon svg {
+  filter: drop-shadow(0 2px 4px rgba(30, 18, 56, 0.12));
+}
+
+.why-feature-line1 {
+  font-family: var(--font-heading);
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: #1E2246 !important;
+  line-height: 1.2;
+}
+
+.why-feature-line2 {
+  font-family: var(--font-heading);
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #2D3748 !important;
+  line-height: 1.2;
+  margin-top: 1px;
+}
+
 /* Why Choose Us Enhanced (Matching Reference Image) */
 .why-choose-card {
   background-color: #EEF4FA !important;
@@ -599,29 +646,169 @@
 }
 
 .trust-circle-icon {
-  width: 56px;
-  height: 56px;
+  width: 62px;
+  height: 62px;
   border-radius: 50%;
   background: #FFFFFF;
   border: 1.5px solid #E2E8F0;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--color-primary);
-  box-shadow: 0 4px 12px rgba(56, 36, 92, 0.08);
-  transition: transform 0.25s ease;
+  box-shadow: 0 4px 14px rgba(30, 18, 56, 0.08);
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
 }
 
 .trust-circle-item:hover .trust-circle-icon {
-  transform: translateY(-2px);
-  border-color: var(--color-primary-light);
+  transform: translateY(-3px);
+  border-color: var(--color-primary);
+  box-shadow: 0 8px 20px rgba(56, 36, 92, 0.15);
 }
 
 .trust-circle-label {
   font-family: var(--font-heading);
-  font-size: 0.8rem;
-  font-weight: 700;
+  font-size: 0.82rem;
+  font-weight: 800;
   color: #1E2246;
-  max-width: 85px;
+  max-width: 90px;
   line-height: 1.25;
+  margin-top: 2px;
+}
+
+/* ========================================================
+   FLOATING ACTION BUTTONS (BOTTOM-RIGHT - WHATSAPP & CALL)
+   ======================================================== */
+.floating-contact-wrapper {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 99999;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 12px;
+  pointer-events: auto;
+}
+
+.floating-btn-item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.floating-btn {
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #FFFFFF !important;
+  text-decoration: none;
+  position: relative;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease;
+}
+
+.floating-btn:hover {
+  transform: scale(1.1);
+  color: #FFFFFF !important;
+}
+
+/* Call Floating Button */
+.floating-call-btn {
+  background: linear-gradient(135deg, #0284C7 0%, #0369A1 100%);
+  box-shadow: 0 8px 24px rgba(2, 132, 199, 0.45);
+}
+
+.floating-call-btn:hover {
+  box-shadow: 0 12px 30px rgba(2, 132, 199, 0.65);
+}
+
+/* WhatsApp Floating Button */
+.floating-wa-btn {
+  background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+  box-shadow: 0 8px 24px rgba(37, 211, 102, 0.45);
+}
+
+.floating-wa-btn:hover {
+  box-shadow: 0 12px 30px rgba(37, 211, 102, 0.65);
+}
+
+.floating-icon {
+  font-size: 26px;
+  line-height: 1;
+}
+
+/* Tooltip on Hover */
+.floating-tooltip {
+  position: absolute;
+  right: 70px;
+  white-space: nowrap;
+  background: #1E1238;
+  color: #FFFFFF;
+  padding: 6px 14px;
+  border-radius: 8px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  pointer-events: none;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
+  animation: fadeInRight 0.2s ease-out;
+}
+
+@keyframes fadeInRight {
+  from {
+    opacity: 0;
+    transform: translateX(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Pulse Rings */
+.floating-pulse-ring {
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  animation: floatingPulse 2.2s infinite cubic-bezier(0.4, 0, 0.6, 1);
+  pointer-events: none;
+}
+
+.call-ring {
+  border: 2px solid rgba(2, 132, 199, 0.55);
+}
+
+.wa-ring {
+  border: 2px solid rgba(37, 211, 102, 0.55);
+}
+
+@keyframes floatingPulse {
+  0% {
+    transform: scale(0.95);
+    opacity: 0.9;
+  }
+  50% {
+    transform: scale(1.25);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+}
+
+@media (max-width: 576px) {
+  .floating-contact-wrapper {
+    bottom: 16px;
+    right: 16px;
+    gap: 10px;
+  }
+  .floating-btn {
+    width: 50px;
+    height: 50px;
+  }
+  .floating-icon {
+    font-size: 22px;
+  }
 }

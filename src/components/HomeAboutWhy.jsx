@@ -1,9 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import {
-  CheckCircle2, ArrowRight, ShieldCheck, Clock,
-  IndianRupee, Headphones, Play, Phone, Sparkles
-} from 'lucide-react';
+import { CheckCircle2, ArrowRight, Play, Phone } from 'lucide-react';
 import { COMPANY_INFO } from '../data/company';
 
 export default function HomeAboutWhy() {
@@ -22,26 +19,43 @@ export default function HomeAboutWhy() {
     }
   };
 
+  // Solid, Bold Icons matching Reference Image exactly
   const WHY_FEATURES = [
     {
-      icon: ShieldCheck,
-      title: "Safe & Secure",
-      sub: "Relocation"
+      icon: (
+        <svg width="42" height="42" viewBox="0 0 24 24" fill="#1E1238">
+          <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/>
+        </svg>
+      ),
+      line1: "Safe & Secure",
+      line2: "Relocation"
     },
     {
-      icon: Clock,
-      title: "On Time",
-      sub: "Delivery"
+      icon: (
+        <svg width="42" height="42" viewBox="0 0 24 24" fill="#1E1238">
+          <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm4.2 14.2L11 13V7h1.5v5.2l4.5 2.7-.8 1.3z"/>
+        </svg>
+      ),
+      line1: "On Time",
+      line2: "Delivery"
     },
     {
-      icon: IndianRupee,
-      title: "Transparent",
-      sub: "Pricing"
+      icon: (
+        <svg width="42" height="42" viewBox="0 0 24 24" fill="#1E1238">
+          <path d="M18 6h-3.5c-.3-1.7-1.5-3-3.5-3H6v3h3c1.7 0 2.5.8 2.8 2H6v3h6c-.3 1.5-1.5 2.5-3 2.5H6v2.5L13 21h3.5l-7-6.5c2.8-.2 4.8-2 5.3-4.5H18V6z"/>
+        </svg>
+      ),
+      line1: "Transparent",
+      line2: "Pricing"
     },
     {
-      icon: Headphones,
-      title: "24×7",
-      sub: "Support"
+      icon: (
+        <svg width="42" height="42" viewBox="0 0 24 24" fill="#1E1238">
+          <path d="M12 1a9 9 0 0 0-9 9v7c0 1.66 1.34 3 3 3h3v-8H5v-2a7 7 0 0 1 14 0v2h-4v8h3c1.66 0 3-1.34 3-3v-7a9 9 0 0 0-9-9z"/>
+        </svg>
+      ),
+      line1: "24×7",
+      line2: "Support"
     }
   ];
 
@@ -122,33 +136,33 @@ export default function HomeAboutWhy() {
             </div>
           </div>
 
-          {/* Right Column: Why Choose Us? (Refined & Elevated matching Reference) */}
+          {/* Right Column: Why Choose Us? (Exact Smooth Light Blue Card from Reference) */}
           <div className="col-lg-4 col-md-6">
-            <div className="why-choose-card royal-card p-4 h-100 d-flex flex-column justify-content-between shadow-sm">
+            <div className="why-choose-reference-card p-4 h-100 d-flex flex-column justify-content-between shadow-sm rounded-4">
               <div>
                 <div className="text-center mb-4">
-                  <h4 className="fw-extrabold text-dark fs-4 mb-1">
+                  <h4 className="fw-extrabold text-dark fs-3 mb-0">
                     Why Choose Us?
                   </h4>
-                  <div className="why-title-accent mx-auto" />
                 </div>
 
-                {/* 2x2 Feature Grid matching Reference Image */}
-                <div className="row g-3 mb-4">
-                  {WHY_FEATURES.map((feat, idx) => {
-                    const Icon = feat.icon;
-                    return (
-                      <div key={idx} className="col-6">
-                        <div className="why-feature-box text-center p-3 rounded-3 bg-white border h-100 shadow-xs">
-                          <div className="why-icon-bubble mx-auto mb-2 text-primary">
-                            <Icon size={26} strokeWidth={2.2} />
-                          </div>
-                          <div className="why-feature-title fw-bold text-dark">{feat.title}</div>
-                          <div className="why-feature-sub text-muted">{feat.sub}</div>
+                {/* 2x2 Feature Grid directly on soft background matching Reference Image */}
+                <div className="row g-4 mb-3 text-center">
+                  {WHY_FEATURES.map((feat, idx) => (
+                    <div key={idx} className="col-6">
+                      <div className="why-feature-item">
+                        <div className="why-solid-icon mb-2">
+                          {feat.icon}
+                        </div>
+                        <div className="why-feature-line1 fw-bold text-dark">
+                          {feat.line1}
+                        </div>
+                        <div className="why-feature-line2 text-dark">
+                          {feat.line2}
                         </div>
                       </div>
-                    );
-                  })}
+                    </div>
+                  ))}
                 </div>
               </div>
 

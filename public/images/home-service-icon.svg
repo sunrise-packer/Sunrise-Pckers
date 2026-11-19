@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 140" width="100%" height="100%">
+  <!-- Royal Purple & Navy House Icon Matching Reference Design -->
+  <defs>
+    <linearGradient id="houseGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38245C"/>
+      <stop offset="100%" stop-color="#1E1238"/>
+    </linearGradient>
+    <filter id="softShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="4" stdDeviation="4" flood-color="#1E1238" flood-opacity="0.15"/>
+    </filter>
+  </defs>
+  
+  <g filter="url(#softShadow)">
+    <!-- Chimney -->
+    <path d="M108 42 V22 H122 V54 Z" fill="#2A1A4E"/>
+    
+    <!-- Roof with Overhang -->
+    <path d="M80 12 L14 62 H30 L80 24 L130 62 H146 Z" fill="url(#houseGrad)"/>
+    
+    <!-- House Main Body -->
+    <path d="M30 60 H130 V122 C130 125 127 128 124 128 H36 C33 128 30 125 30 122 Z" fill="url(#houseGrad)"/>
+    
+    <!-- Chimney Smoke / Decorative Accent -->
+    <circle cx="115" cy="14" r="3" fill="#F59E0B" opacity="0.8"/>
+    
+    <!-- Arch Doorway (White Knockout) -->
+    <path d="M66 128 V86 C66 78 72 72 80 72 C88 72 94 78 94 86 V128 Z" fill="#FFFFFF"/>
+    
+    <!-- Inner Door Color -->
+    <path d="M70 128 V88 C70 82 74 77 80 77 C86 77 90 82 90 88 V128 Z" fill="#F1ECF8"/>
+    <circle cx="86" cy="104" r="2.5" fill="#38245C"/>
+    
+    <!-- Left Window 4-pane -->
+    <rect x="42" y="74" width="14" height="14" rx="2" fill="#FFFFFF"/>
+    <rect x="44" y="76" width="4.5" height="4.5" fill="#38245C"/>
+    <rect x="49.5" y="76" width="4.5" height="4.5" fill="#38245C"/>
+    <rect x="44" y="81.5" width="4.5" height="4.5" fill="#38245C"/>
+    <rect x="49.5" y="81.5" width="4.5" height="4.5" fill="#38245C"/>
+    
+    <!-- Right Window 4-pane -->
+    <rect x="104" y="74" width="14" height="14" rx="2" fill="#FFFFFF"/>
+    <rect x="106" y="76" width="4.5" height="4.5" fill="#38245C"/>
+    <rect x="111.5" y="76" width="4.5" height="4.5" fill="#38245C"/>
+    <rect x="106" y="81.5" width="4.5" height="4.5" fill="#38245C"/>
+    <rect x="111.5" y="81.5" width="4.5" height="4.5" fill="#38245C"/>
+    
+    <!-- Attic Round Window -->
+    <circle cx="80" cy="46" r="6" fill="#FFFFFF"/>
+    <circle cx="80" cy="46" r="4.5" fill="#F59E0B"/>
+  </g>
+</svg>
