@@ -1,0 +1,48 @@
+:root {
+  /* Brand Color Palette */
+  --color-primary: #38245C;
+  --color-primary-dark: #271842;
+  --color-primary-darker: #1A102C;
+  --color-primary-light: #523783;
+  --color-primary-soft: #F1ECF8;
+  --color-primary-subtle: rgba(56, 36, 92, 0.08);
+
+  --color-silver: #C7C9D3;
+  --color-silver-light: #EBECEF;
+  --color-silver-border: #D8D9E3;
+  --color-silver-dark: #8F93A5;
+
+  --color-white: #FFFFFF;
+  --color-light-bg: #F7F7FA;
+  --color-light-card: #FFFFFF;
+  --color-dark-text: #24212D;
+  --color-muted-text: #5A5766;
+
+  --color-accent-sunrise: #F59E0B;
+  --color-accent-sunrise-light: #FEF3C7;
+  --color-whatsapp: #25D366;
+  --color-whatsapp-dark: #1EBE5D;
+  --color-call: #0284C7;
+
+  /* Typography */
+  --font-heading: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-body: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+  /* Elevations */
+  --shadow-sm: 0 2px 8px rgba(36, 33, 45, 0.04);
+  --shadow-md: 0 6px 20px rgba(56, 36, 92, 0.08);
+  --shadow-lg: 0 12px 36px rgba(56, 36, 92, 0.12);
+  --shadow-xl: 0 20px 50px rgba(56, 36, 92, 0.18);
+  --shadow-purple: 0 10px 25px rgba(56, 36, 92, 0.25);
+
+  /* Radius */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+  --radius-xl: 24px;
+  --radius-pill: 9999px;
+
+  /* Transitions */
+  --transition-fast: 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-normal: 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
