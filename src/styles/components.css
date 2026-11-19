@@ -448,3 +448,87 @@
 .pac-item:hover {
   background-color: var(--color-primary-soft);
 }
+/* Enhanced Service Card Photos */
+.service-card-photo-wrap {
+  height: 125px;
+  background-color: var(--color-light-bg);
+  border-bottom: 1px solid var(--color-silver-border);
+}
+
+.service-card-real-img {
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.reference-service-card:hover .service-card-real-img {
+  transform: scale(1.08);
+}
+
+.service-mini-tag {
+  background-color: var(--color-primary-dark) !important;
+  font-size: 0.7rem;
+  letter-spacing: 0.02em;
+}
+
+/* Why Choose Us Enhanced Icons */
+.why-icon-bubble {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.text-warning-dark {
+  color: #D97706 !important;
+}
+
+/* Hero Typography Refinements matching Reference */
+.hero-main-title {
+  font-family: var(--font-hero);
+  font-size: 3.4rem;
+  font-weight: 900;
+  color: var(--color-primary-darker);
+  letter-spacing: -0.03em;
+  line-height: 1.12;
+}
+
+@media (max-width: 991px) {
+  .hero-main-title {
+    font-size: 2.3rem;
+  }
+}
+
+.hero-sub-title {
+  font-family: var(--font-heading);
+  font-size: 1.85rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  letter-spacing: -0.015em;
+  font-style: italic;
+}
+
+@media (max-width: 991px) {
+  .hero-sub-title {
+    font-size: 1.35rem;
+  }
+}
+
+.hero-tagline-ribbon {
+  background: var(--color-accent-sunrise) !important;
+  color: #1A102C !important;
+  font-family: var(--font-heading);
+  font-weight: 800;
+  font-size: 1.15rem;
+  box-shadow: 0 4px 15px rgba(245, 158, 11, 0.35);
+  border: 1px solid #D97706;
+}
+
+@media (max-width: 768px) {
+  .hero-tagline-ribbon {
+    font-size: 0.95rem;
+    padding: 0.4rem 1.2rem !important;
+  }
+}
