@@ -1,16 +1,16 @@
 import React from 'react';
 import {
   ShieldCheck, Truck, Clock, Award, Phone,
-  MessageCircle, ArrowRight, CheckCircle2, MapPin
+  MessageCircle, ArrowRight
 } from 'lucide-react';
 import { COMPANY_INFO } from '../data/company';
 
 export default function HomeHero({ onQuoteClick }) {
   const TRUST_BADGES = [
-    { label: "Safe Packing", icon: ShieldCheck, sub: "Multi-Layer Wrap" },
-    { label: "Secure Transport", icon: Truck, sub: "Closed Carrier" },
-    { label: "On Time Delivery", icon: Clock, sub: "Scheduled Routes" },
-    { label: "Trusted Service", icon: Award, sub: "Direct Oversight" }
+    { label: "Safe Packing", icon: ShieldCheck },
+    { label: "Secure Transport", icon: Truck },
+    { label: "On Time Delivery", icon: Clock },
+    { label: "Trusted Service", icon: Award }
   ];
 
   return (
@@ -99,61 +99,16 @@ export default function HomeHero({ onQuoteClick }) {
             </div>
           </div>
 
-          {/* Right Column: Moving Truck & Delivery Presentation */}
+          {/* Right Column: Moving Truck & Mover Delivery Visual (Exact Reference Composition) */}
           <div className="col-lg-5">
             <div className="hero-truck-visual position-relative rounded-4 overflow-hidden shadow-xl border bg-white p-2">
               <div className="truck-img-wrapper position-relative rounded-3 overflow-hidden">
                 <img
-                  src="/images/container-truck-loaded.jpg"
-                  alt="Sunrise Packers & Movers Container Carrier Fleet"
+                  src="/images/hero-truck-mover.jpg"
+                  alt="Sunrise Packers & Movers Logistics Moving Fleet & Professional Mover"
                   className="w-100 object-fit-cover hero-visual-main-img"
+                  style={{ maxHeight: '420px' }}
                 />
-                <div className="truck-overlay-badge p-3 text-white">
-                  <div className="d-flex align-items-center gap-2">
-                    <Truck size={22} className="text-warning flex-shrink-0" />
-                    <div>
-                      <div className="fw-bold small">All-Weather Closed Container Fleet</div>
-                      <div className="fs-7 text-silver">Safe Highway Relocation All Across India</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Secondary Thumbnails Strip with Actual Photos */}
-              <div className="row g-2 mt-1">
-                <div className="col-4">
-                  <div className="thumb-box rounded-2 overflow-hidden position-relative">
-                    <img
-                      src="/images/truck-open-loading.jpg"
-                      alt="Loading operations"
-                      className="w-100 object-fit-cover"
-                      style={{ height: '75px' }}
-                    />
-                    <span className="fs-8 text-white position-absolute bottom-0 start-0 w-100 text-center bg-dark bg-opacity-75 py-0">Loading</span>
-                  </div>
-                </div>
-                <div className="col-4">
-                  <div className="thumb-box rounded-2 overflow-hidden position-relative">
-                    <img
-                      src="/images/bike-scooter-packing.jpg"
-                      alt="Bike packaging"
-                      className="w-100 object-fit-cover"
-                      style={{ height: '75px' }}
-                    />
-                    <span className="fs-8 text-white position-absolute bottom-0 start-0 w-100 text-center bg-dark bg-opacity-75 py-0">Bike Pack</span>
-                  </div>
-                </div>
-                <div className="col-4">
-                  <div className="thumb-box rounded-2 overflow-hidden position-relative">
-                    <img
-                      src="/images/sofa-cushion-packing.jpg"
-                      alt="Sofa protection"
-                      className="w-100 object-fit-cover"
-                      style={{ height: '75px' }}
-                    />
-                    <span className="fs-8 text-white position-absolute bottom-0 start-0 w-100 text-center bg-dark bg-opacity-75 py-0">Sofa Pack</span>
-                  </div>
-                </div>
               </div>
             </div>
           </div>

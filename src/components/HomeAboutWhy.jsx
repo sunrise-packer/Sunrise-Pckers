@@ -2,7 +2,7 @@ import React, { useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
   CheckCircle2, ArrowRight, ShieldCheck, Clock,
-  IndianRupee, Headphones, Play, Phone, Award, Sparkles
+  IndianRupee, Headphones, Play, Phone, Sparkles
 } from 'lucide-react';
 import { COMPANY_INFO } from '../data/company';
 
@@ -21,6 +21,29 @@ export default function HomeAboutWhy() {
       }
     }
   };
+
+  const WHY_FEATURES = [
+    {
+      icon: ShieldCheck,
+      title: "Safe & Secure",
+      sub: "Relocation"
+    },
+    {
+      icon: Clock,
+      title: "On Time",
+      sub: "Delivery"
+    },
+    {
+      icon: IndianRupee,
+      title: "Transparent",
+      sub: "Pricing"
+    },
+    {
+      icon: Headphones,
+      title: "24×7",
+      sub: "Support"
+    }
+  ];
 
   return (
     <section className="about-why-section py-5 bg-light-surface">
@@ -101,53 +124,31 @@ export default function HomeAboutWhy() {
 
           {/* Right Column: Why Choose Us? (Refined & Elevated matching Reference) */}
           <div className="col-lg-4 col-md-6">
-            <div className="why-choose-card royal-card p-4 bg-white h-100 d-flex flex-column justify-content-between shadow-sm">
+            <div className="why-choose-card royal-card p-4 h-100 d-flex flex-column justify-content-between shadow-sm">
               <div>
-                <div className="d-flex align-items-center justify-content-center gap-2 mb-3">
-                  <Sparkles size={20} className="text-warning" />
-                  <h4 className="fw-extrabold mb-0 text-center text-dark fs-4">
+                <div className="text-center mb-4">
+                  <h4 className="fw-extrabold text-dark fs-4 mb-1">
                     Why Choose Us?
                   </h4>
+                  <div className="why-title-accent mx-auto" />
                 </div>
 
-                {/* 2x2 Feature Grid with Rich Icons & Reassuring Badges */}
-                <div className="row g-2 mb-3">
-                  <div className="col-6">
-                    <div className="why-feature-box text-center p-3 rounded-3 bg-light border h-100">
-                      <div className="why-icon-bubble mx-auto mb-2 bg-primary-soft text-primary">
-                        <ShieldCheck size={22} />
+                {/* 2x2 Feature Grid matching Reference Image */}
+                <div className="row g-3 mb-4">
+                  {WHY_FEATURES.map((feat, idx) => {
+                    const Icon = feat.icon;
+                    return (
+                      <div key={idx} className="col-6">
+                        <div className="why-feature-box text-center p-3 rounded-3 bg-white border h-100 shadow-xs">
+                          <div className="why-icon-bubble mx-auto mb-2 text-primary">
+                            <Icon size={26} strokeWidth={2.2} />
+                          </div>
+                          <div className="why-feature-title fw-bold text-dark">{feat.title}</div>
+                          <div className="why-feature-sub text-muted">{feat.sub}</div>
+                        </div>
                       </div>
-                      <div className="fs-7 fw-bold text-dark">Safe & Secure</div>
-                      <div className="fs-8 text-muted">Relocation</div>
-                    </div>
-                  </div>
-                  <div className="col-6">
-                    <div className="why-feature-box text-center p-3 rounded-3 bg-light border h-100">
-                      <div className="why-icon-bubble mx-auto mb-2 bg-warning bg-opacity-25 text-warning-dark">
-                        <Clock size={22} className="text-warning-dark" />
-                      </div>
-                      <div className="fs-7 fw-bold text-dark">On Time</div>
-                      <div className="fs-8 text-muted">Delivery</div>
-                    </div>
-                  </div>
-                  <div className="col-6">
-                    <div className="why-feature-box text-center p-3 rounded-3 bg-light border h-100">
-                      <div className="why-icon-bubble mx-auto mb-2 bg-success bg-opacity-10 text-success">
-                        <IndianRupee size={22} />
-                      </div>
-                      <div className="fs-7 fw-bold text-dark">Transparent</div>
-                      <div className="fs-8 text-muted">Pricing</div>
-                    </div>
-                  </div>
-                  <div className="col-6">
-                    <div className="why-feature-box text-center p-3 rounded-3 bg-light border h-100">
-                      <div className="why-icon-bubble mx-auto mb-2 bg-info bg-opacity-10 text-info">
-                        <Headphones size={22} />
-                      </div>
-                      <div className="fs-7 fw-bold text-dark">24×7</div>
-                      <div className="fs-8 text-muted">Support</div>
-                    </div>
-                  </div>
+                    );
+                  })}
                 </div>
               </div>
 
