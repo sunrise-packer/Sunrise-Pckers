@@ -29,10 +29,10 @@
   --color-whatsapp-dark: #1EBE5D;
   --color-call: #0284C7;
 
-  /* Typography */
-  --font-hero: 'Poppins', 'Montserrat', -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-heading: 'Poppins', 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-body: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  /* Premium Typography: Manrope (Headings) & Inter (Body) */
+  --font-hero: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-heading: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 
   /* Elevations */
   --shadow-sm: 0 2px 8px rgba(36, 33, 45, 0.05);

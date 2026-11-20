@@ -3,6 +3,7 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import FloatingContactButtons from './components/FloatingContactButtons';
+import EnquiryPopup from './components/EnquiryPopup';
 
 import Home from './pages/Home';
 import About from './pages/About';
@@ -33,6 +34,7 @@ export default function App() {
       </main>
       <Footer />
       <FloatingContactButtons />
+      <EnquiryPopup />
     </div>
   );
 }

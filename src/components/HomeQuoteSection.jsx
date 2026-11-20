@@ -173,7 +173,7 @@ _Please review and discuss my moving requirements for a quotation._`;
                 <div className="alert alert-info py-2 px-3 small d-flex align-items-center gap-2 mb-3">
                   <Info size={16} className="text-primary flex-shrink-0" />
                   <span>
-                    Submit your moving details and our team will contact you to understand your requirements and provide a quotation.
+                    Share your moving details. Our team will contact you to understand your requirements and provide a quotation.
                   </span>
                 </div>
               </div>

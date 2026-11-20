@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Phone, MessageCircle, Mail, MapPin, ChevronRight, Heart } from 'lucide-react';
+import { Phone, Mail, MapPin, ChevronRight } from 'lucide-react';
 import { COMPANY_INFO } from '../data/company';
 
 export default function Footer() {
@@ -38,42 +38,42 @@ export default function Footer() {
             </h6>
             <ul className="list-unstyled footer-links small">
               <li className="mb-2">
-                <Link to="/" className="text-silver hover-white d-inline-flex align-items-center gap-1">
+                <Link to="/" className="text-silver hover-white d-inline-flex align-items-center gap-1 text-decoration-none">
                   <ChevronRight size={14} className="text-warning" /> Home
                 </Link>
               </li>
               <li className="mb-2">
-                <Link to="/about" className="text-silver hover-white d-inline-flex align-items-center gap-1">
+                <Link to="/about" className="text-silver hover-white d-inline-flex align-items-center gap-1 text-decoration-none">
                   <ChevronRight size={14} className="text-warning" /> About Us
                 </Link>
               </li>
               <li className="mb-2">
-                <Link to="/services" className="text-silver hover-white d-inline-flex align-items-center gap-1">
+                <Link to="/services" className="text-silver hover-white d-inline-flex align-items-center gap-1 text-decoration-none">
                   <ChevronRight size={14} className="text-warning" /> Our Services
                 </Link>
               </li>
               <li className="mb-2">
-                <a href="#process-section" className="text-silver hover-white d-inline-flex align-items-center gap-1">
+                <a href="#process-section" className="text-silver hover-white d-inline-flex align-items-center gap-1 text-decoration-none">
                   <ChevronRight size={14} className="text-warning" /> Our Process
                 </a>
               </li>
               <li className="mb-2">
-                <a href="#testimonials-section" className="text-silver hover-white d-inline-flex align-items-center gap-1">
+                <a href="#testimonials-section" className="text-silver hover-white d-inline-flex align-items-center gap-1 text-decoration-none">
                   <ChevronRight size={14} className="text-warning" /> Testimonials
                 </a>
               </li>
               <li className="mb-2">
-                <Link to="/gallery" className="text-silver hover-white d-inline-flex align-items-center gap-1">
+                <Link to="/gallery" className="text-silver hover-white d-inline-flex align-items-center gap-1 text-decoration-none">
                   <ChevronRight size={14} className="text-warning" /> Gallery
                 </Link>
               </li>
               <li className="mb-2">
-                <Link to="/contact" className="text-silver hover-white d-inline-flex align-items-center gap-1">
+                <Link to="/contact" className="text-silver hover-white d-inline-flex align-items-center gap-1 text-decoration-none">
                   <ChevronRight size={14} className="text-warning" /> Contact Us
                 </Link>
               </li>
               <li className="mb-2">
-                <Link to="/privacy-policy" className="text-silver hover-white d-inline-flex align-items-center gap-1">
+                <Link to="/privacy-policy" className="text-silver hover-white d-inline-flex align-items-center gap-1 text-decoration-none">
                   <ChevronRight size={14} className="text-warning" /> Privacy Policy
                 </Link>
               </li>
@@ -87,32 +87,32 @@ export default function Footer() {
             </h6>
             <ul className="list-unstyled footer-links small">
               <li className="mb-2">
-                <Link to="/services/home-shifting" className="text-silver hover-white d-inline-flex align-items-center gap-1">
+                <Link to="/services/home-shifting" className="text-silver hover-white d-inline-flex align-items-center gap-1 text-decoration-none">
                   <ChevronRight size={14} className="text-warning" /> Household Shifting
                 </Link>
               </li>
               <li className="mb-2">
-                <Link to="/services/office-shifting" className="text-silver hover-white d-inline-flex align-items-center gap-1">
+                <Link to="/services/office-shifting" className="text-silver hover-white d-inline-flex align-items-center gap-1 text-decoration-none">
                   <ChevronRight size={14} className="text-warning" /> Office Relocation
                 </Link>
               </li>
               <li className="mb-2">
-                <Link to="/services/car-transportation" className="text-silver hover-white d-inline-flex align-items-center gap-1">
+                <Link to="/services/car-transportation" className="text-silver hover-white d-inline-flex align-items-center gap-1 text-decoration-none">
                   <ChevronRight size={14} className="text-warning" /> Car Transportation
                 </Link>
               </li>
               <li className="mb-2">
-                <Link to="/services/bike-transportation" className="text-silver hover-white d-inline-flex align-items-center gap-1">
+                <Link to="/services/bike-transportation" className="text-silver hover-white d-inline-flex align-items-center gap-1 text-decoration-none">
                   <ChevronRight size={14} className="text-warning" /> Bike Transportation
                 </Link>
               </li>
               <li className="mb-2">
-                <Link to="/services/packing-moving" className="text-silver hover-white d-inline-flex align-items-center gap-1">
+                <Link to="/services/packing-moving" className="text-silver hover-white d-inline-flex align-items-center gap-1 text-decoration-none">
                   <ChevronRight size={14} className="text-warning" /> Packing & Moving
                 </Link>
               </li>
               <li className="mb-2">
-                <Link to="/services/storage-warehousing" className="text-silver hover-white d-inline-flex align-items-center gap-1">
+                <Link to="/services/storage-warehousing" className="text-silver hover-white d-inline-flex align-items-center gap-1 text-decoration-none">
                   <ChevronRight size={14} className="text-warning" /> Warehousing & Storage
                 </Link>
               </li>
@@ -151,13 +151,24 @@ export default function Footer() {
         {/* Separator */}
         <hr className="border-secondary opacity-25 my-2" />
 
-        {/* Bottom Bar */}
+        {/* Bottom Bar: Copyright & Mandatory Websirg Developer Credit */}
         <div className="d-flex flex-column flex-md-row justify-content-between align-items-center gap-2 small text-silver pt-2">
           <div>
             © {currentYear} <strong>{COMPANY_INFO.name}</strong>. All Rights Reserved.
           </div>
           <div className="d-flex align-items-center gap-3">
-            <span>Designed with <Heart size={14} className="text-danger fill-danger" /> for a Better Tomorrow</span>
+            <span>
+              Designed &amp; Developed by{' '}
+              <a
+                href="https://websirg.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-silver hover-white text-decoration-none fw-semibold"
+                title="Websirg - Professional Web Design & Development"
+              >
+                Websirg
+              </a>
+            </span>
           </div>
         </div>
       </div>

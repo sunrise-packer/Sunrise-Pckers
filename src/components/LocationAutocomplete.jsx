@@ -1,13 +1,11 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { MapPin, Navigation, Map as MapIcon, Loader2, Check, X } from 'lucide-react';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { loadGoogleMaps } from '../utils/googleMapsLoader';
-import MapPickerModal from './MapPickerModal';
 import { searchLocations, POPULAR_LOCATIONS } from '../data/indianLocations';
 
 export default function LocationAutocomplete({
   label,
   placeholder,
-  value,
+  value = '',
   onChange,
   onLocationSelect,
   required = false,
@@ -19,8 +17,6 @@ export default function LocationAutocomplete({
   const autocompleteRef = useRef(null);
 
   const [isLocating, setIsLocating] = useState(false);
-  const [isMapModalOpen, setIsMapModalOpen] = useState(false);
-  const [coords, setCoords] = useState(null);
   const [suggestions, setSuggestions] = useState([]);
   const [showDropdown, setShowDropdown] = useState(false);
   const [geoNotice, setGeoNotice] = useState(null);
@@ -31,7 +27,7 @@ export default function LocationAutocomplete({
 
     loadGoogleMaps()
       .then((googleMaps) => {
-        if (!isMounted || !inputRef.current || !googleMaps.places) return;
+        if (!isMounted || !inputRef.current || !googleMaps?.places) return;
 
         try {
           const autocomplete = new googleMaps.places.Autocomplete(inputRef.current, {
@@ -43,14 +39,13 @@ export default function LocationAutocomplete({
 
           autocomplete.addListener('place_changed', () => {
             const place = autocomplete.getPlace();
-            if (place && place.formatted_address) {
-              const selectedAddr = place.formatted_address;
+            if (place && (place.formatted_address || place.name)) {
+              const selectedAddr = place.formatted_address || place.name;
               const locationCoords = place.geometry ? {
                 lat: place.geometry.location.lat(),
                 lng: place.geometry.location.lng()
               } : null;
 
-              setCoords(locationCoords);
               onChange(selectedAddr);
               setShowDropdown(false);
               if (onLocationSelect) {
@@ -70,12 +65,17 @@ export default function LocationAutocomplete({
         window.google.maps.event.clearInstanceListeners(autocompleteRef.current);
       }
     };
-  }, []);
+  }, [onChange, onLocationSelect]);
 
-  // Handle typing: trigger instant built-in autocomplete
+  // Handle typing: ALWAYS editable, invalidates old coordinates on manual change
   const handleInputChange = (e) => {
     const val = e.target.value;
     onChange(val);
+
+    // Invalidate old selected-place coordinates whenever text is manually modified
+    if (onLocationSelect) {
+      onLocationSelect({ address: val, coords: null });
+    }
 
     if (val.trim().length >= 1) {
       const results = searchLocations(val);
@@ -84,6 +84,20 @@ export default function LocationAutocomplete({
     } else {
       setSuggestions([]);
       setShowDropdown(false);
+    }
+  };
+
+  // Dedicated Clear Button: instantly clears field and refocuses input for replacement
+  const handleClear = () => {
+    onChange('');
+    if (onLocationSelect) {
+      onLocationSelect({ address: '', coords: null });
+    }
+    setSuggestions([]);
+    setShowDropdown(false);
+    setGeoNotice(null);
+    if (inputRef.current) {
+      inputRef.current.focus();
     }
   };
 
@@ -108,12 +122,15 @@ export default function LocationAutocomplete({
     if (onLocationSelect) {
       onLocationSelect({ address: fullAddress, coords: null });
     }
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
   };
 
-  // Browser Geolocation
+  // Browser Geolocation: Fills current location and keeps field fully editable
   const handleCurrentLocationClick = () => {
     if (!navigator.geolocation) {
-      setGeoNotice('Geolocation not supported by this browser. Please select or type your area.');
+      setGeoNotice('Geolocation not supported by browser. Please type your location manually.');
       return;
     }
 
@@ -126,7 +143,6 @@ export default function LocationAutocomplete({
         const lat = position.coords.latitude;
         const lng = position.coords.longitude;
         const userCoords = { lat, lng };
-        setCoords(userCoords);
 
         // Check if coordinates are close to Navi Mumbai / Mumbai region
         const isNearMumbai = lat > 18.5 && lat < 19.5 && lng > 72.5 && lng < 73.5;
@@ -151,25 +167,19 @@ export default function LocationAutocomplete({
           onChange(defaultDetectedAddr);
           if (onLocationSelect) onLocationSelect({ address: defaultDetectedAddr, coords: userCoords });
         }
+
+        if (inputRef.current) {
+          inputRef.current.focus();
+        }
       },
       (geoError) => {
         setIsLocating(false);
-        // If permission denied or timed out, open quick locality selection
-        setGeoNotice('GPS permission blocked or timed out. Please choose from common locations below or type directly:');
+        setGeoNotice('GPS blocked or timed out. Please type your address manually below.');
         setShowDropdown(true);
         setSuggestions(POPULAR_LOCATIONS.slice(0, 6));
       },
       { timeout: 7000, enableHighAccuracy: false }
     );
-  };
-
-  const handleMapConfirm = ({ address: confirmedAddr, coords: confirmedCoords }) => {
-    setCoords(confirmedCoords);
-    onChange(confirmedAddr);
-    setShowDropdown(false);
-    if (onLocationSelect) {
-      onLocationSelect({ address: confirmedAddr, coords: confirmedCoords });
-    }
   };
 
   return (
@@ -178,19 +188,11 @@ export default function LocationAutocomplete({
         <label htmlFor={id} className="form-label fw-semibold text-dark mb-0 fs-7">
           {label} {required && <span className="text-danger">*</span>}
         </label>
-        <button
-          type="button"
-          className="btn-select-map-link text-decoration-none border-0 bg-transparent p-0 d-inline-flex align-items-center gap-1 text-primary fs-8 fw-bold"
-          onClick={() => setIsMapModalOpen(true)}
-        >
-          <MapIcon size={13} />
-          <span>Select on Map</span>
-        </button>
       </div>
 
       <div className="input-group location-input-group">
         <span className="input-group-text bg-white border-end-0 text-muted">
-          <MapPin size={17} className="text-primary-custom" />
+          <i className="bi bi-geo-alt-fill text-primary" />
         </span>
         <input
           ref={inputRef}
@@ -200,29 +202,38 @@ export default function LocationAutocomplete({
           placeholder={placeholder}
           value={value}
           onChange={handleInputChange}
-          onFocus={() => {
-            if (value && value.trim().length >= 1) {
-              const res = searchLocations(value);
-              setSuggestions(res);
-              setShowDropdown(res.length > 0);
-            }
-          }}
           required={required}
           autoComplete="off"
         />
+
+        {/* 1-Click Clear Button when address is present */}
+        {value && value.length > 0 && (
+          <button
+            type="button"
+            className="btn btn-outline-light text-muted border-top border-bottom border-start-0 border-end-0 px-2 d-flex align-items-center"
+            onClick={handleClear}
+            title="Clear and retype address"
+            aria-label="Clear location input"
+          >
+            <i className="bi bi-x-circle-fill text-secondary fs-7" />
+          </button>
+        )}
+
+        {/* Current Location GPS Button */}
         <button
           type="button"
           className="btn btn-outline-secondary d-flex align-items-center gap-1 px-3"
           onClick={handleCurrentLocationClick}
-          title="Use my current GPS location"
+          title="Detect and use current GPS location"
           disabled={isLocating}
+          aria-label="Detect current location"
         >
           {isLocating ? (
-            <Loader2 size={16} className="spin-icon text-primary" />
+            <span className="spinner-border spinner-border-sm text-primary" role="status" aria-hidden="true" />
           ) : (
-            <Navigation size={16} className="text-primary" />
+            <i className="bi bi-crosshair text-primary fs-7" />
           )}
-          <span className="d-none d-sm-inline small">Current</span>
+          <span className="d-none d-sm-inline small fw-semibold">Current</span>
         </button>
       </div>
 
@@ -236,8 +247,9 @@ export default function LocationAutocomplete({
             type="button"
             className="btn-close-custom p-0 border-0 bg-transparent text-muted"
             onClick={() => setGeoNotice(null)}
+            aria-label="Close notice"
           >
-            <X size={14} />
+            <i className="bi bi-x-lg fs-8" />
           </button>
         </div>
       )}
@@ -251,8 +263,9 @@ export default function LocationAutocomplete({
               type="button"
               className="border-0 bg-transparent text-muted p-0"
               onClick={() => setShowDropdown(false)}
+              aria-label="Close suggestions"
             >
-              <X size={14} />
+              <i className="bi bi-x-lg fs-8" />
             </button>
           </div>
           <ul className="list-unstyled mb-0 py-1">
@@ -263,7 +276,7 @@ export default function LocationAutocomplete({
                   className="dropdown-item py-2 px-3 d-flex align-items-center gap-2 text-start border-0 bg-transparent w-100"
                   onClick={() => handleSelectSuggestion(loc)}
                 >
-                  <MapPin size={16} className="text-primary flex-shrink-0" />
+                  <i className="bi bi-geo-alt text-primary flex-shrink-0" />
                   <div className="flex-grow-1">
                     <div className="fw-semibold text-dark fs-7">{loc.name}</div>
                     <div className="text-muted fs-8">{loc.state} {loc.pin && `• Pincode: ${loc.pin}`}</div>
@@ -274,15 +287,6 @@ export default function LocationAutocomplete({
           </ul>
         </div>
       )}
-
-      {/* Map Picker Modal */}
-      <MapPickerModal
-        isOpen={isMapModalOpen}
-        onClose={() => setIsMapModalOpen(false)}
-        onConfirm={handleMapConfirm}
-        initialLocation={{ address: value, coords }}
-        title={`Pinpoint ${label}`}
-      />
     </div>
   );
 }

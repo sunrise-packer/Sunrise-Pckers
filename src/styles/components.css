@@ -812,3 +812,98 @@
     font-size: 22px;
   }
 }
+
+/* ========================================================
+   ENQUIRY POPUP MODAL (15-SECOND REPEATABLE INTERVAL)
+   ======================================================== */
+.enquiry-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(22, 13, 42, 0.65);
+  backdrop-filter: blur(4px);
+  z-index: 100000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  overflow-y: auto;
+  animation: modalFadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.enquiry-modal-dialog {
+  width: 100%;
+  max-width: 580px;
+  margin: auto;
+}
+
+.enquiry-modal-content {
+  border: 1px solid var(--color-silver-border);
+  box-shadow: 0 20px 60px rgba(56, 36, 92, 0.35);
+  animation: modalScaleUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes modalFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes modalScaleUp {
+  from {
+    opacity: 0;
+    transform: scale(0.92) translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.enquiry-modal-header {
+  background: linear-gradient(135deg, #38245C 0%, #1E1238 100%);
+  border-bottom: 2px solid var(--color-accent-sunrise);
+}
+
+.btn-close-modal {
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  width: 36px;
+  height: 36px;
+  transition: all var(--transition-fast);
+}
+
+.btn-close-modal:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: rotate(90deg);
+}
+
+/* ========================================================
+   TRUST & STATISTICS SECTION (4.5 STAR RATING & ALL INDIA)
+   ======================================================== */
+.trust-stats-section {
+  background-color: #F8F9FD;
+}
+
+.trust-stat-card {
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  border: 1px solid #E2E8F0;
+}
+
+.trust-stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(56, 36, 92, 0.08);
+}
+
+.trust-stat-icon-wrap {
+  width: 52px;
+  height: 52px;
+}
+
+/* Location input clear button */
+.btn-clear-location {
+  cursor: pointer;
+  background: #FFFFFF;
+}
+
+.btn-clear-location:hover i {
+  color: #DC2626 !important;
+}

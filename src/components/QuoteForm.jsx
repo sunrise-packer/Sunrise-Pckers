@@ -148,7 +148,7 @@ ${formData.emailAddress.trim() ? `✉️ *Email:* ${formData.emailAddress.trim()
 🛗 *Lift Status:* ${liftText}
 ${formData.additionalMessage.trim() ? `📝 *Special Notes:* ${formData.additionalMessage.trim()}\n` : ''}
 ---------------------------------------
-_Sent via Sunrise Packers & Movers Website Quote Calculator_`;
+_Share your moving details. Our team will contact you to understand your requirements and provide a quotation._`;
   };
 
   const handleOpenWhatsApp = () => {
@@ -299,7 +299,7 @@ _Sent via Sunrise Packers & Movers Website Quote Calculator_`;
             <span className="step-badge">2</span>
             <div>
               <h5 className="mb-0 fw-bold">Pickup & Destination Details</h5>
-              <small className="text-muted">Type for Google autocomplete suggestions, click GPS icon, or Select on Map</small>
+              <small className="text-muted">Type for Google autocomplete suggestions or click Current GPS icon</small>
             </div>
           </div>
 
@@ -549,14 +549,14 @@ _Sent via Sunrise Packers & Movers Website Quote Calculator_`;
         {/* SUBMIT BUTTON BAR */}
         <div className="p-4 rounded-4 bg-royal-primary text-white d-flex flex-column flex-md-row justify-content-between align-items-center gap-3 shadow-lg">
           <div>
-            <h5 className="text-white mb-1 fw-bold">Ready to Receive Your Moving Estimate?</h5>
+            <h5 className="text-white mb-1 fw-bold">Ready to Discuss Your Moving Requirements?</h5>
             <p className="text-silver mb-0 small">
-              Click below to validate your enquiry and generate your personalized WhatsApp moving request.
+              Share your moving details. Our team will contact you to understand your requirements and provide a quotation.
             </p>
           </div>
-          <button type="submit" className="btn btn-whatsapp-solid px-4 py-3 fs-6 flex-shrink-0">
-            <Send size={18} />
-            <span>Generate WhatsApp Quote</span>
+          <button type="submit" className="btn btn-whatsapp-solid px-4 py-3 fs-6 flex-shrink-0 d-inline-flex align-items-center gap-2">
+            <i className="bi bi-whatsapp fs-5" />
+            <span>Submit Enquiry on WhatsApp</span>
             <ArrowRight size={18} />
           </button>
         </div>

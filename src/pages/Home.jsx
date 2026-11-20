@@ -6,6 +6,7 @@ import HomeHero from '../components/HomeHero';
 import HomeServices from '../components/HomeServices';
 import HomeAboutWhy from '../components/HomeAboutWhy';
 import HomeTestimonials from '../components/HomeTestimonials';
+import TrustStats from '../components/TrustStats';
 import HomeQuoteSection from '../components/HomeQuoteSection';
 import ProcessSteps from '../components/ProcessSteps';
 import FAQAccordion from '../components/FAQAccordion';
@@ -41,6 +42,9 @@ export default function Home() {
 
       {/* 7. CUSTOMER TESTIMONIALS */}
       <HomeTestimonials />
+
+      {/* 7B. TRUST & CUSTOMER RATING STATISTICS */}
+      <TrustStats />
 
       {/* 8. GET FREE QUOTE FORM (ON HOMEPAGE — STRICT QUOTE RULE: NO AUTO CALCULATOR) */}
       <HomeQuoteSection />
