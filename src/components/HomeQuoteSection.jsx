@@ -249,7 +249,10 @@ _Please review and discuss my moving requirements for a quotation._`;
                       label="Moving From"
                       placeholder="Pickup Area / City"
                       value={formData.pickupLocation}
-                      onChange={(val) => setFormData((prev) => ({ ...prev, pickupLocation: val }))}
+                      onChange={(val) => {
+                        setFormData((prev) => ({ ...prev, pickupLocation: val }));
+                        if (errors.pickupLocation) setErrors((prev) => ({ ...prev, pickupLocation: null }));
+                      }}
                       required
                       error={errors.pickupLocation}
                     />
@@ -260,7 +263,10 @@ _Please review and discuss my moving requirements for a quotation._`;
                       label="Moving To"
                       placeholder="Destination Area / City"
                       value={formData.destinationLocation}
-                      onChange={(val) => setFormData((prev) => ({ ...prev, destinationLocation: val }))}
+                      onChange={(val) => {
+                        setFormData((prev) => ({ ...prev, destinationLocation: val }));
+                        if (errors.destinationLocation) setErrors((prev) => ({ ...prev, destinationLocation: null }));
+                      }}
                       required
                       error={errors.destinationLocation}
                     />

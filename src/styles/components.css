@@ -411,14 +411,16 @@
 /* Location Autocomplete & Dropdowns */
 .smart-location-dropdown {
   position: absolute;
-  top: 100%;
+  top: calc(100% + 4px);
   left: 0;
   right: 0;
-  z-index: 1050;
-  max-height: 250px;
+  z-index: 100020 !important;
+  max-height: 280px;
   overflow-y: auto;
   border-radius: var(--radius-md);
-  margin-top: 4px;
+  box-shadow: 0 15px 40px rgba(56, 36, 92, 0.25) !important;
+  background: #FFFFFF !important;
+  border: 1px solid var(--color-silver-border) !important;
 }
 
 .smart-location-dropdown .dropdown-item {
@@ -426,13 +428,14 @@
   cursor: pointer;
 }
 
-.smart-location-dropdown .dropdown-item:hover {
-  background-color: var(--color-primary-soft);
+.smart-location-dropdown .dropdown-item:hover,
+.smart-location-dropdown .dropdown-item.active {
+  background-color: var(--color-primary-soft) !important;
 }
 
 /* Ensure Google Places Autocomplete container has highest z-index */
 .pac-container {
-  z-index: 99999 !important;
+  z-index: 100020 !important;
   border-radius: 8px !important;
   box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2) !important;
   font-family: inherit !important;
@@ -840,6 +843,14 @@
   border: 1px solid var(--color-silver-border);
   box-shadow: 0 20px 60px rgba(56, 36, 92, 0.35);
   animation: modalScaleUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow: visible !important;
+}
+
+.enquiry-modal-header {
+  background: linear-gradient(135deg, #38245C 0%, #1E1238 100%);
+  border-bottom: 2px solid var(--color-accent-sunrise);
+  border-top-left-radius: 1rem;
+  border-top-right-radius: 1rem;
 }
 
 @keyframes modalFadeIn {

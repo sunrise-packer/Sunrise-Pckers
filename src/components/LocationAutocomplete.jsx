@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
+import { searchLocationSuggestions, reverseGeocode } from '../services/locationService';
 import { loadGoogleMaps } from '../utils/googleMapsLoader';
-import { searchLocations, POPULAR_LOCATIONS } from '../data/indianLocations';
 
 export default function LocationAutocomplete({
   label,
@@ -10,84 +10,69 @@ export default function LocationAutocomplete({
   onLocationSelect,
   required = false,
   id,
-  error
+  error,
+  disabled = false
 }) {
   const inputRef = useRef(null);
-  const dropdownRef = useRef(null);
-  const autocompleteRef = useRef(null);
+  const containerRef = useRef(null);
+  const debounceTimerRef = useRef(null);
 
   const [isLocating, setIsLocating] = useState(false);
   const [suggestions, setSuggestions] = useState([]);
   const [showDropdown, setShowDropdown] = useState(false);
+  const [activeIndex, setActiveIndex] = useState(-1);
   const [geoNotice, setGeoNotice] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
-  // Setup Google Places Autocomplete if available on domain
+  // Pre-load Google Maps asynchronously in background once on mount
   useEffect(() => {
-    let isMounted = true;
+    loadGoogleMaps().catch(() => {
+      // Ignored: locationService will gracefully fallback
+    });
+  }, []);
 
-    loadGoogleMaps()
-      .then((googleMaps) => {
-        if (!isMounted || !inputRef.current || !googleMaps?.places) return;
+  // Debounced search query
+  const triggerSearch = useCallback((searchTerm) => {
+    if (debounceTimerRef.current) {
+      clearTimeout(debounceTimerRef.current);
+    }
 
-        try {
-          const autocomplete = new googleMaps.places.Autocomplete(inputRef.current, {
-            componentRestrictions: { country: 'in' },
-            fields: ['formatted_address', 'geometry', 'name']
-          });
+    if (!searchTerm || searchTerm.trim().length === 0) {
+      setSuggestions([]);
+      setShowDropdown(false);
+      setIsLoading(false);
+      return;
+    }
 
-          autocompleteRef.current = autocomplete;
-
-          autocomplete.addListener('place_changed', () => {
-            const place = autocomplete.getPlace();
-            if (place && (place.formatted_address || place.name)) {
-              const selectedAddr = place.formatted_address || place.name;
-              const locationCoords = place.geometry ? {
-                lat: place.geometry.location.lat(),
-                lng: place.geometry.location.lng()
-              } : null;
-
-              onChange(selectedAddr);
-              setShowDropdown(false);
-              if (onLocationSelect) {
-                onLocationSelect({ address: selectedAddr, coords: locationCoords });
-              }
-            }
-          });
-        } catch (err) {
-          console.warn('Google Places Autocomplete notice:', err);
-        }
-      })
-      .catch(() => {});
-
-    return () => {
-      isMounted = false;
-      if (autocompleteRef.current && window.google?.maps?.event) {
-        window.google.maps.event.clearInstanceListeners(autocompleteRef.current);
+    setIsLoading(true);
+    debounceTimerRef.current = setTimeout(async () => {
+      try {
+        const results = await searchLocationSuggestions(searchTerm);
+        setSuggestions(results);
+        setShowDropdown(results.length > 0);
+        setActiveIndex(-1);
+      } catch (err) {
+        setSuggestions([]);
+        setShowDropdown(false);
+      } finally {
+        setIsLoading(false);
       }
-    };
-  }, [onChange, onLocationSelect]);
+    }, 220);
+  }, []);
 
-  // Handle typing: ALWAYS editable, invalidates old coordinates on manual change
+  // Handle typing: always editable, never blocked
   const handleInputChange = (e) => {
     const val = e.target.value;
     onChange(val);
 
-    // Invalidate old selected-place coordinates whenever text is manually modified
     if (onLocationSelect) {
       onLocationSelect({ address: val, coords: null });
     }
 
-    if (val.trim().length >= 1) {
-      const results = searchLocations(val);
-      setSuggestions(results);
-      setShowDropdown(results.length > 0);
-    } else {
-      setSuggestions([]);
-      setShowDropdown(false);
-    }
+    triggerSearch(val);
   };
 
-  // Dedicated Clear Button: instantly clears field and refocuses input for replacement
+  // Dedicated Clear Button: clears field and refocuses input
   const handleClear = () => {
     onChange('');
     if (onLocationSelect) {
@@ -96,41 +81,80 @@ export default function LocationAutocomplete({
     setSuggestions([]);
     setShowDropdown(false);
     setGeoNotice(null);
+    setActiveIndex(-1);
     if (inputRef.current) {
       inputRef.current.focus();
+    }
+  };
+
+  // Select suggestion
+  const handleSelectSuggestion = (item) => {
+    const selectedAddress = item.fullAddress || item.mainText;
+    onChange(selectedAddress);
+    setShowDropdown(false);
+    setSuggestions([]);
+    setActiveIndex(-1);
+
+    if (onLocationSelect) {
+      onLocationSelect({
+        address: selectedAddress,
+        coords: item.coords || null,
+        placeDetails: item
+      });
+    }
+
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  };
+
+  // Keyboard Navigation: ArrowDown, ArrowUp, Enter, Escape
+  const handleKeyDown = (e) => {
+    if (!showDropdown || suggestions.length === 0) {
+      if (e.key === 'ArrowDown' && value.trim().length >= 1) {
+        triggerSearch(value);
+      }
+      return;
+    }
+
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      setActiveIndex((prev) => (prev < suggestions.length - 1 ? prev + 1 : 0));
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      setActiveIndex((prev) => (prev > 0 ? prev - 1 : suggestions.length - 1));
+    } else if (e.key === 'Enter') {
+      if (activeIndex >= 0 && activeIndex < suggestions.length) {
+        e.preventDefault();
+        handleSelectSuggestion(suggestions[activeIndex]);
+      }
+    } else if (e.key === 'Escape') {
+      setShowDropdown(false);
+      setActiveIndex(-1);
     }
   };
 
   // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (e) => {
-      if (
-        dropdownRef.current && !dropdownRef.current.contains(e.target) &&
-        inputRef.current && !inputRef.current.contains(e.target)
-      ) {
+      if (containerRef.current && !containerRef.current.contains(e.target)) {
         setShowDropdown(false);
       }
     };
+
     document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    document.addEventListener('touchstart', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('touchstart', handleClickOutside);
+      if (debounceTimerRef.current) clearTimeout(debounceTimerRef.current);
+    };
   }, []);
 
-  const handleSelectSuggestion = (loc) => {
-    const fullAddress = `${loc.name}, ${loc.state} ${loc.pin ? `(${loc.pin})` : ''}`;
-    onChange(fullAddress);
-    setShowDropdown(false);
-    if (onLocationSelect) {
-      onLocationSelect({ address: fullAddress, coords: null });
-    }
-    if (inputRef.current) {
-      inputRef.current.focus();
-    }
-  };
-
-  // Browser Geolocation: Fills current location and keeps field fully editable
+  // Browser Geolocation: Fills current location using reverse geocoding
   const handleCurrentLocationClick = () => {
     if (!navigator.geolocation) {
-      setGeoNotice('Geolocation not supported by browser. Please type your location manually.');
+      setGeoNotice('Geolocation is not supported by your browser. Please type your location manually.');
       return;
     }
 
@@ -138,57 +162,52 @@ export default function LocationAutocomplete({
     setGeoNotice(null);
 
     navigator.geolocation.getCurrentPosition(
-      (position) => {
-        setIsLocating(false);
+      async (position) => {
         const lat = position.coords.latitude;
         const lng = position.coords.longitude;
-        const userCoords = { lat, lng };
 
-        // Check if coordinates are close to Navi Mumbai / Mumbai region
-        const isNearMumbai = lat > 18.5 && lat < 19.5 && lng > 72.5 && lng < 73.5;
-        const defaultDetectedAddr = isNearMumbai
-          ? `Near Mansarovar / Kamothe, Navi Mumbai (GPS: ${lat.toFixed(4)}, ${lng.toFixed(4)})`
-          : `Current Location (GPS: ${lat.toFixed(4)}, ${lng.toFixed(4)})`;
-
-        // If Google geocoder works, reverse geocode
-        if (window.google?.maps?.Geocoder) {
-          const geocoder = new window.google.maps.Geocoder();
-          geocoder.geocode({ location: userCoords }, (results, status) => {
-            if (status === 'OK' && results?.[0]) {
-              const formattedAddr = results[0].formatted_address;
-              onChange(formattedAddr);
-              if (onLocationSelect) onLocationSelect({ address: formattedAddr, coords: userCoords });
-            } else {
-              onChange(defaultDetectedAddr);
-              if (onLocationSelect) onLocationSelect({ address: defaultDetectedAddr, coords: userCoords });
-            }
-          });
-        } else {
-          onChange(defaultDetectedAddr);
-          if (onLocationSelect) onLocationSelect({ address: defaultDetectedAddr, coords: userCoords });
-        }
-
-        if (inputRef.current) {
-          inputRef.current.focus();
+        try {
+          const { address, coords } = await reverseGeocode(lat, lng);
+          onChange(address);
+          if (onLocationSelect) {
+            onLocationSelect({ address, coords });
+          }
+        } catch (err) {
+          const fallback = `Current Location (GPS: ${lat.toFixed(4)}, ${lng.toFixed(4)})`;
+          onChange(fallback);
+          if (onLocationSelect) {
+            onLocationSelect({ address: fallback, coords: { lat, lng } });
+          }
+        } finally {
+          setIsLocating(false);
+          if (inputRef.current) inputRef.current.focus();
         }
       },
       (geoError) => {
         setIsLocating(false);
-        setGeoNotice('GPS blocked or timed out. Please type your address manually below.');
-        setShowDropdown(true);
-        setSuggestions(POPULAR_LOCATIONS.slice(0, 6));
+        let msg = 'GPS blocked or timed out. Please type your address manually below.';
+        if (geoError.code === geoError.PERMISSION_DENIED) {
+          msg = 'Location permission was denied. Please type your address manually.';
+        }
+        setGeoNotice(msg);
       },
-      { timeout: 7000, enableHighAccuracy: false }
+      { timeout: 9000, enableHighAccuracy: true, maximumAge: 30000 }
     );
   };
 
   return (
-    <div className="location-field-wrapper mb-3 position-relative">
-      <div className="d-flex justify-content-between align-items-center mb-1">
-        <label htmlFor={id} className="form-label fw-semibold text-dark mb-0 fs-7">
-          {label} {required && <span className="text-danger">*</span>}
-        </label>
-      </div>
+    <div
+      ref={containerRef}
+      className="location-field-wrapper mb-3 position-relative"
+      style={{ zIndex: showDropdown ? 1060 : 'auto' }}
+    >
+      {label && (
+        <div className="d-flex justify-content-between align-items-center mb-1">
+          <label htmlFor={id} className="form-label fw-semibold text-dark mb-0 fs-7">
+            {label} {required && <span className="text-danger">*</span>}
+          </label>
+        </div>
+      )}
 
       <div className="input-group location-input-group">
         <span className="input-group-text bg-white border-end-0 text-muted">
@@ -202,12 +221,34 @@ export default function LocationAutocomplete({
           placeholder={placeholder}
           value={value}
           onChange={handleInputChange}
+          onKeyDown={handleKeyDown}
+          onFocus={() => {
+            if (value.trim().length >= 1 && suggestions.length > 0) {
+              setShowDropdown(true);
+            }
+          }}
           required={required}
+          disabled={disabled}
           autoComplete="off"
+          aria-autocomplete="list"
+          aria-expanded={showDropdown}
+          aria-haspopup="listbox"
         />
 
-        {/* 1-Click Clear Button when address is present */}
-        {value && value.length > 0 && (
+        {/* Loading Spinner Indicator */}
+        {isLoading && (
+          <span className="input-group-text bg-white border-start-0 border-end-0 px-2">
+            <span
+              className="spinner-border spinner-border-sm text-primary"
+              style={{ width: '0.9rem', height: '0.9rem' }}
+              role="status"
+              aria-hidden="true"
+            />
+          </span>
+        )}
+
+        {/* 1-Click Clear Button */}
+        {value && value.length > 0 && !disabled && (
           <button
             type="button"
             className="btn btn-outline-light text-muted border-top border-bottom border-start-0 border-end-0 px-2 d-flex align-items-center"
@@ -225,11 +266,15 @@ export default function LocationAutocomplete({
           className="btn btn-outline-secondary d-flex align-items-center gap-1 px-3"
           onClick={handleCurrentLocationClick}
           title="Detect and use current GPS location"
-          disabled={isLocating}
+          disabled={isLocating || disabled}
           aria-label="Detect current location"
         >
           {isLocating ? (
-            <span className="spinner-border spinner-border-sm text-primary" role="status" aria-hidden="true" />
+            <span
+              className="spinner-border spinner-border-sm text-primary"
+              role="status"
+              aria-hidden="true"
+            />
           ) : (
             <i className="bi bi-crosshair text-primary fs-7" />
           )}
@@ -237,9 +282,10 @@ export default function LocationAutocomplete({
         </button>
       </div>
 
+      {/* Validation Feedback */}
       {error && <div className="invalid-feedback d-block mt-1 small">{error}</div>}
 
-      {/* Geolocation Notice if GPS blocked */}
+      {/* Geolocation Notice */}
       {geoNotice && (
         <div className="alert alert-warning py-1 px-2 small mt-1 d-flex justify-content-between align-items-center fs-8">
           <span>{geoNotice}</span>
@@ -254,11 +300,17 @@ export default function LocationAutocomplete({
         </div>
       )}
 
-      {/* Instant Intelligent Autocomplete Dropdown */}
+      {/* Real-time Location Suggestions Dropdown */}
       {showDropdown && suggestions.length > 0 && (
-        <div ref={dropdownRef} className="smart-location-dropdown shadow-lg rounded-3 border bg-white">
+        <div
+          className="smart-location-dropdown shadow-xl rounded-3 border bg-white"
+          role="listbox"
+          id={`${id}-suggestions`}
+        >
           <div className="dropdown-header-strip px-3 py-1 bg-light border-bottom text-muted fs-8 fw-semibold d-flex justify-content-between align-items-center">
-            <span>Location Suggestions</span>
+            <span className="d-flex align-items-center gap-1">
+              <i className="bi bi-search text-primary fs-8" /> Suggested Locations in India
+            </span>
             <button
               type="button"
               className="border-0 bg-transparent text-muted p-0"
@@ -268,22 +320,34 @@ export default function LocationAutocomplete({
               <i className="bi bi-x-lg fs-8" />
             </button>
           </div>
-          <ul className="list-unstyled mb-0 py-1">
-            {suggestions.map((loc, idx) => (
-              <li key={idx}>
-                <button
-                  type="button"
-                  className="dropdown-item py-2 px-3 d-flex align-items-center gap-2 text-start border-0 bg-transparent w-100"
-                  onClick={() => handleSelectSuggestion(loc)}
-                >
-                  <i className="bi bi-geo-alt text-primary flex-shrink-0" />
-                  <div className="flex-grow-1">
-                    <div className="fw-semibold text-dark fs-7">{loc.name}</div>
-                    <div className="text-muted fs-8">{loc.state} {loc.pin && `• Pincode: ${loc.pin}`}</div>
-                  </div>
-                </button>
-              </li>
-            ))}
+          <ul className="list-unstyled mb-0 py-1" style={{ maxHeight: '260px', overflowY: 'auto' }}>
+            {suggestions.map((item, idx) => {
+              const isSelected = idx === activeIndex;
+              return (
+                <li key={item.id || idx}>
+                  <button
+                    type="button"
+                    className={`dropdown-item py-2 px-3 d-flex align-items-start gap-2 text-start border-0 bg-transparent w-100 ${
+                      isSelected ? 'active bg-primary-subtle text-primary' : ''
+                    }`}
+                    onClick={() => handleSelectSuggestion(item)}
+                    onMouseEnter={() => setActiveIndex(idx)}
+                  >
+                    <i className="bi bi-geo-alt-fill text-primary mt-1 flex-shrink-0 fs-7" />
+                    <div className="flex-grow-1 overflow-hidden">
+                      <div className="fw-semibold text-dark fs-7 text-truncate">
+                        {item.mainText}
+                      </div>
+                      {item.secondaryText && (
+                        <div className="text-muted fs-8 text-truncate">
+                          {item.secondaryText}
+                        </div>
+                      )}
+                    </div>
+                  </button>
+                </li>
+              );
+            })}
           </ul>
         </div>
       )}

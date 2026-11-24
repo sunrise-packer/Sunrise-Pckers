@@ -157,7 +157,7 @@ _Share your moving details. Our team will contact you to understand your require
   return (
     <div className="enquiry-modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="popup-title">
       <div className="enquiry-modal-dialog">
-        <div className="enquiry-modal-content position-relative rounded-4 bg-white shadow-xl overflow-hidden border">
+        <div className="enquiry-modal-content position-relative rounded-4 bg-white shadow-xl overflow-visible border">
           {/* Header Banner with Royal Purple theme */}
           <div className="enquiry-modal-header p-3 px-4 bg-royal-primary text-white d-flex align-items-center justify-content-between position-relative">
             <div className="d-flex align-items-center gap-3">
@@ -242,7 +242,10 @@ _Share your moving details. Our team will contact you to understand your require
                     label="Moving From"
                     placeholder="Pickup Area / City"
                     value={formData.movingFrom}
-                    onChange={(val) => setFormData((prev) => ({ ...prev, movingFrom: val }))}
+                    onChange={(val) => {
+                      setFormData((prev) => ({ ...prev, movingFrom: val }));
+                      if (errors.movingFrom) setErrors((prev) => ({ ...prev, movingFrom: null }));
+                    }}
                     required
                     error={errors.movingFrom}
                   />
@@ -253,7 +256,10 @@ _Share your moving details. Our team will contact you to understand your require
                     label="Moving To"
                     placeholder="Destination Area / City"
                     value={formData.movingTo}
-                    onChange={(val) => setFormData((prev) => ({ ...prev, movingTo: val }))}
+                    onChange={(val) => {
+                      setFormData((prev) => ({ ...prev, movingTo: val }));
+                      if (errors.movingTo) setErrors((prev) => ({ ...prev, movingTo: null }));
+                    }}
                     required
                     error={errors.movingTo}
                   />

@@ -295,7 +295,16 @@ ${formData.email.trim() ? `✉️ *Email:* ${formData.email.trim()}\n` : ''}
                       <div>
                         <MapPin size={32} className="text-primary mb-2" />
                         <div><strong>Sunrise Packers & Movers Office</strong></div>
-                        <div className="small">Near Mansarovar Station, New Mumbai, Maharashtra 410206</div>
+                        <div className="small mb-2">Near Mansarovar Station, New Mumbai, Maharashtra 410206</div>
+                        <a
+                          href={`https://www.google.com/maps/dir/?api=1&destination=${COMPANY_INFO.coordinates.lat},${COMPANY_INFO.coordinates.lng}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="btn btn-sm btn-royal-primary mt-2"
+                        >
+                          <MapPin size={14} className="me-1" />
+                          Open Directions in Google Maps
+                        </a>
                       </div>
                     </div>
                   )}
