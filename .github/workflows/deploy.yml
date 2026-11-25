@@ -34,8 +34,10 @@ jobs:
       - name: Build website
         run: npm run build
 
-      - name: Add custom domain
-        run: echo "www.sunrisepackersmovers.in" > dist/CNAME
+      - name: Add custom domain and SPA 404 fallback
+        run: |
+          echo "www.sunrisepackersmovers.in" > dist/CNAME
+          cp dist/index.html dist/404.html
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3

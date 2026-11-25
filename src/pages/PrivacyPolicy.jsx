@@ -42,7 +42,7 @@ export default function PrivacyPolicy() {
                   <div>
                     <h4 className="fw-bold text-dark mb-2">1. Overview & Commitment</h4>
                     <p>
-                      <strong>{COMPANY_INFO.name}</strong>, owned and operated by <strong>{COMPANY_INFO.owner}</strong>, operates the business website located at sunrisepackersandmovers.com. We are committed to protecting the privacy of our customers and visitors. We do not sell, rent, trade, or distribute your personal contact information to third-party telemarketers or external advertising networks.
+                      <strong>{COMPANY_INFO.name}</strong>, owned and operated by <strong>{COMPANY_INFO.owner}</strong>, operates the business website located at www.sunrisepackersmovers.in. We are committed to protecting the privacy of our customers and visitors. We do not sell, rent, trade, or distribute your personal contact information to third-party telemarketers or external advertising networks.
                     </p>
                   </div>
 
